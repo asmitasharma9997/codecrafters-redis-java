@@ -19,16 +19,15 @@ public class ServerThread extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             OutputStream output = socket.getOutputStream();
             String line;
-            while (true) {
-                if ((line = reader.readLine()) != null) {
-                    //Show them
-                    if (line.startsWith("*") || line.startsWith("$"))
-                        continue;
-                    PrintWriter writer = new PrintWriter(output, true);
-                    writer.println("+PONG\r");
-                    System.out.println(line);
-                }
-                socket.close();
+            while ((line = reader.readLine()) != null) {
+//                if ((line = reader.readLine()) != null) {
+                //Show them
+                if (line.startsWith("*") || line.startsWith("$"))
+                    continue;
+                PrintWriter writer = new PrintWriter(output, true);
+                writer.println("+PONG\r");
+                System.out.println(line);
+//                }
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
