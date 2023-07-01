@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -18,10 +21,25 @@ public class Main {
             serverSocket.setReuseAddress(true);
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
-//            InputStream input = clientSocket.getInputStream();
+            InputStream input = clientSocket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             OutputStream output = clientSocket.getOutputStream();
-            PrintWriter writer = new PrintWriter(output, true);
-            writer.println("+PONG\r");
+            String line;
+            while (true) {
+                try {
+                    if ((line = reader.readLine()) != null) {
+                        //Show them
+                        if (line.startsWith("*") || line.startsWith("$"))
+                            continue;
+                        PrintWriter writer = new PrintWriter(output, true);
+                        writer.println("+PONG\r");
+                        System.out.println(line);
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
