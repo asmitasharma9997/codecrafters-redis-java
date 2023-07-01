@@ -21,25 +21,25 @@ public class Main {
             serverSocket.setReuseAddress(true);
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
-            InputStream input = clientSocket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            OutputStream output = clientSocket.getOutputStream();
-            String line;
-            while (true) {
-                try {
-                    if ((line = reader.readLine()) != null) {
-                        //Show them
-                        if (line.startsWith("*") || line.startsWith("$"))
-                            continue;
-                        PrintWriter writer = new PrintWriter(output, true);
-                        writer.println("+PONG\r");
-                        System.out.println(line);
-                    }
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
+            new ServerThread(clientSocket).start();
+//            InputStream input = clientSocket.getInputStream();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+//            OutputStream output = clientSocket.getOutputStream();
+//            String line;
+//            while (true) {
+//                try {
+//                    if ((line = reader.readLine()) != null) {
+//                        //Show them
+//                        if (line.startsWith("*") || line.startsWith("$"))
+//                            continue;
+//                        PrintWriter writer = new PrintWriter(output, true);
+//                        writer.println("+PONG\r");
+//                        System.out.println(line);
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
